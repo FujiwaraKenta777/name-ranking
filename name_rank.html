@@ -2,6 +2,7 @@
 <html>
   <body>
     <div id="app">
+      <!-- 初期ソートでcountが多い順で並べる -->
       <vue-good-table
       :columns="columns"
       :rows="rows"
@@ -18,8 +19,6 @@
 <link href="https://cdn.jsdelivr.net/npm/vue-good-table@2.16.3/dist/vue-good-table.css" rel='stylesheet'> 
 <script src="https://cdn.jsdelivr.net/npm/vue-good-table@2.16.3/dist/vue-good-table.js"></script>
 
-
-
 <script src="data.js"></script>
 <script>
 Vue.use(window.vueGoodTable.default);
@@ -29,7 +28,6 @@ let names=[...data.members].map(value=>value.name);
 
 //苗字をキーとしたMapにいれることで集計する
 let nameMap={};
-
 names.forEach(name=> {
     if(!nameMap[name.split('.',1)]) nameMap[name.split('.',1)]=[];
     nameMap[name.split('.',1)].push(name);
@@ -45,7 +43,7 @@ Object.keys(nameMap).forEach(key=>{
     nameJsons.push(nameJson);
 });
 
-
+//vue good table で表示する
 var app = new Vue({
   el: '#app',
   data:{
