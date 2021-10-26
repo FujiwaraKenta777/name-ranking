@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="app">
+      <vue-good-table
+      :columns="columns"
+      :rows="rows"
+      :sort-options="{
+        enabled: true,
+        initialSortBy: {field: 'count', type: 'desc'}
+      }">
+    </vue-good-table>
+      </div>
+  </body>
+</html>
+
+<script src="https://unpkg.com/vue"></script>
+<link href="https://cdn.jsdelivr.net/npm/vue-good-table@2.16.3/dist/vue-good-table.css" rel='stylesheet'> 
+<script src="https://cdn.jsdelivr.net/npm/vue-good-table@2.16.3/dist/vue-good-table.js"></script>
+
+
+
+<script src="data.js"></script>
+<script>
+Vue.use(window.vueGoodTable.default);
+
+//データから名前を取り出す
+let names=[...data.members].map(value=>value.name);
+
+//苗字をキーとしたMapにいれることで集計する
+let nameMap={};
+
+names.forEach(name=> {
+    if(!nameMap[name.split('.',1)]) nameMap[name.split('.',1)]=[];
+    nameMap[name.split('.',1)].push(name);
+});
+
+//Jsonに成型する
+let nameJsons=[];
+Object.keys(nameMap).forEach(key=>{
+    let nameJson={};
+    nameJson.lastName=key;
+    nameJson.names=nameMap[key];
+    nameJson.count=nameMap[key].length;
+    nameJsons.push(nameJson);
+});
+
+
+var app = new Vue({
+  el: '#app',
+  data:{
+    columns: [
+      {
+        label: 'last name',
+        field: 'lastName',
+      },
+      {
+        label: 'names',
+      　field: 'names',
+      },
+      {
+        label: 'count',
+        field: 'count',
+        type: 'number',
+      },
+    ],
+    rows:nameJsons
+  }
+});
+</script>
